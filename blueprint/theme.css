@@ -1,1 +1,9 @@
+/*
+ * Blueprint: a drafting table for Pi Pocket. Dim cyanotype blue, a faint drawing grid under the conversation, square
+ * ink lines, double rules like a drawing's title block, and small mono capitals for labels. Orange pencil crop marks
+ * frame your messages, and slide in around the message box while you type. The light half is a whiteprint: warm
+ * drafting paper with Prussian-blue ink.
+ *
+ * layout.css is the layout; colors.toml and colors-light.toml are the palettes.
+ */
 @import "layout.css";
