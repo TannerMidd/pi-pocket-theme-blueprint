@@ -1,0 +1,24 @@
+# Blueprint: a cyanotype. A deep, dim Prussian-blue ground, chalk-white lines and text, a cool cyan accent,
+# and an amber "pencil" for marks. Its light half (colors-light.toml) is a whiteprint.
+mode = "dark"
+
+accent = "#6fb3dc"
+selection = "#1a3550"
+
+background = "#0b1a2a"
+dark_background = "#081422"
+darker_background = "#050e18"
+lighter_background = "#11243a"
+
+foreground = "#b4c6d8"
+dark_foreground = "#7a93ab"
+light_foreground = "#c3d3e2"
+bright_foreground = "#dfe9f2"
+
+red = "#e88a7e"
+yellow = "#dcbc6a"
+orange = "#e5a06e"
+green = "#86c79c"
+cyan = "#76c4cc"
+blue = "#80a8e0"
+magenta = "#b49ad8"

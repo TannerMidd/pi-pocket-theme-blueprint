@@ -1,0 +1,8 @@
+{
+    "themeApi": 1,
+    "name": "Blueprint",
+    "description": "A drafting table: cyanotype blue on a faint grid, square ink lines, crop-marked cards, and mono labels. Its light half is a whiteprint.",
+    "author": "tanner",
+    "version": "1.0.0",
+    "minPocket": "0.14.0"
+}

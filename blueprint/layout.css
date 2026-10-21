@@ -1,0 +1,506 @@
+/*
+ * Blueprint's layout: a drafting table. A faint drawing grid under the conversation, square ink lines, double rules
+ * like a drawing's title block, mono labels in small capitals, and orange pencil crop marks that frame your messages
+ * and the message box while you type. Only tokens and parts (docs/extensions/reference/theme-surface.md).
+ */
+
+/* ─── Tokens ─── */
+
+:root {
+    /* The pencil: crop marks, the π, and what the theme draws in a second color. */
+    --pencil: var(--o-orange);
+    --accent-2: var(--pencil);
+    --brand: var(--pencil);
+    --spark: var(--pencil);
+
+    /* Quiet text that still reads on the blue: 4.5:1 or more on every surface. */
+    --muted: color-mix(in oklab, var(--body) 80%, var(--bg));
+    --faint: color-mix(in oklab, var(--body) 66%, var(--bg));
+
+    /* Surfaces: the sidebar a shade deeper, like the board under the sheet. */
+    --panel: var(--o-bg-dark);
+    --code-bg: color-mix(in srgb, var(--o-bg-dark) 82%, transparent);
+    --card: color-mix(in srgb, var(--body) 5%, var(--bg));
+    --card-2: color-mix(in srgb, var(--body) 9%, var(--bg));
+
+    /* Ink lines: crisp, a little stronger than the app's. */
+    --line: color-mix(in srgb, var(--body) 16%, var(--bg));
+    --line-strong: color-mix(in srgb, var(--body) 30%, var(--bg));
+    --hair: color-mix(in srgb, var(--body) 13%, transparent);
+    --hair-2: color-mix(in srgb, var(--body) 22%, transparent);
+    --scrim: color-mix(in srgb, var(--desk) 66%, transparent);
+
+    /* The drawing grid: a fine line every 24px, a stronger one every 5 cells. */
+    --grid-minor: color-mix(in srgb, var(--body) 3%, transparent);
+    --grid-major: color-mix(in srgb, var(--body) 5.5%, transparent);
+    --grid:
+        linear-gradient(var(--grid-major) 1px, transparent 1px) -1px -1px / 120px 120px,
+        linear-gradient(90deg, var(--grid-major) 1px, transparent 1px) -1px -1px / 120px 120px,
+        linear-gradient(var(--grid-minor) 1px, transparent 1px) -1px -1px / 24px 24px,
+        linear-gradient(90deg, var(--grid-minor) 1px, transparent 1px) -1px -1px / 24px 24px;
+
+    /* Square, drafted corners. Pills (avatars, counts) stay round. */
+    --r-mark: 1px;
+    --r-tag: 2px;
+    --r-seg: 2px;
+    --r-row: 2px;
+    --r-control: 3px;
+    --r-card: 3px;
+    --r-window: 4px;
+    --r-sheet: 5px;
+    --r-float: 6px;
+
+    --gap-out: 10px;
+    --gap-in: 5px;
+
+    /* Windows: an ink border; the one in focus gets a second, offset rule in the accent. */
+    --window-border: var(--line);
+    --window-border-active: var(--accent-line);
+    --window-ring:
+        0 0 0 3px var(--desk), 0 0 0 4px color-mix(in srgb, var(--accent) 35%, transparent);
+
+    /* Nothing casts a shadow at rest; what floats lifts off the table. */
+    --sh: rgb(2 10 22 / 0.5);
+    --shadow: none;
+    --pop: 0 0 0 1px var(--line-strong), 0 24px 56px -24px var(--sh);
+
+    /* Steps sit on square survey marks. */
+    --step-mark-size: 18px;
+
+    --t-hover: 160ms;
+
+    /* One readable column, a little narrower than Pocket's. */
+    --transcript-width: clamp(calc(36 * var(--text-size, 15px) + 56px), 66%, 1100px);
+    --composer-width: calc(var(--transcript-width) - 8px);
+}
+
+:root[data-mode="light"] {
+    --sh: rgb(20 40 70 / 0.22);
+    --grid-minor: color-mix(in srgb, var(--accent) 7%, transparent);
+    --grid-major: color-mix(in srgb, var(--accent) 13%, transparent);
+    --muted: color-mix(in oklab, var(--body) 84%, var(--bg));
+    --faint: color-mix(in oklab, var(--body) 72%, var(--bg));
+}
+
+/* ─── The table and its sheets ─── */
+
+/* The gaps between tiled windows: the cutting mat, its grid stronger. The desktop's wallpaper, when shown, wins. */
+@media (min-width: 700px) {
+    :root[data-tiling="on"] [data-part~="app"] {
+        background:
+            var(--wallpaper, none) center / cover no-repeat,
+            linear-gradient(
+                    color-mix(in srgb, var(--body) 6%, transparent) 1px,
+                    transparent 1px
+                ) -1px -1px /
+                40px 40px,
+            linear-gradient(
+                    90deg,
+                    color-mix(in srgb, var(--body) 6%, transparent) 1px,
+                    transparent 1px
+                ) -1px -1px /
+                40px 40px,
+            var(--desk);
+    }
+}
+
+/* The conversation's sheet: the drawing grid under the words. It stays put while the words scroll over it. */
+[data-part~="pane"] {
+    background: var(--grid), var(--bg);
+}
+
+/* ─── Labels: small mono capitals, like a drawing's lettering ─── */
+
+:is(
+    [data-part~="session-list-title"],
+    [data-part~="session-group-name"],
+    [data-part~="topbar-sub"],
+    [data-part~="code-head"],
+    [data-part~="home-heading"],
+    [data-part~="prompt-head"]
+) {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+/* ─── The sidebar ─── */
+
+[data-part~="session-list-title"] {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+[data-part~="session-group-name"] {
+    color: var(--muted);
+}
+
+[data-part~="session-group-count"] {
+    font-family: var(--mono);
+    font-size: 10.5px;
+}
+
+/* Rows: a pencil tick at the start while hovered, an accent rule on the open one. */
+[data-part~="session-button"] {
+    position: relative;
+    border-radius: var(--r-row);
+}
+
+[data-part~="session-button"]::after {
+    content: "";
+    position: absolute;
+    inset-block: 7px;
+    inset-inline-start: 0;
+    width: 2px;
+    background: var(--accent);
+    transform: scaleY(0);
+    transition: transform var(--t-hover) var(--ease-out);
+    pointer-events: none;
+}
+
+@media (hover: hover) {
+    [data-part~="session-button"]:hover::after {
+        background: var(--line-strong);
+        transform: scaleY(0.6);
+    }
+}
+
+[data-part~="session-button"][aria-current="page"] {
+    background: color-mix(in srgb, var(--accent) 11%, transparent);
+}
+
+[data-part~="session-button"][aria-current="page"]::after {
+    background: var(--accent);
+    transform: scaleY(1);
+}
+
+[data-part~="session-search"],
+[data-part~="session-tabs"] {
+    border-radius: var(--r-control);
+}
+
+/* The rail: square buttons; the open one's mark is an accent rule at its start. */
+[data-part~="rail-button"] {
+    position: relative;
+    border-radius: var(--r-control);
+}
+
+[data-part~="rail-button"][data-state~="open"]::after {
+    content: "";
+    position: absolute;
+    inset-block: 9px;
+    inset-inline-start: -8px;
+    width: 2px;
+    background: var(--accent);
+    pointer-events: none;
+}
+
+/* ─── The top bar: a title block, with a double rule under it ─── */
+
+[data-part~="topbar"] {
+    border-bottom: 1px solid var(--line-strong);
+    box-shadow:
+        0 2px 0 var(--bg),
+        0 3px 0 var(--hair);
+}
+
+[data-part~="topbar-title"] {
+    font-size: 14.5px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+}
+
+[data-part~="topbar-sub"] {
+    color: var(--muted);
+}
+
+/* ─── The conversation ─── */
+
+/* Your messages: a drafted callout, framed by four pencil crop marks. Others' sit on the left, yours on the right. */
+[data-part~="prompt"] {
+    position: relative;
+    border: 1px solid var(--line);
+    border-radius: var(--r-card);
+    background: color-mix(in srgb, var(--bg) 70%, var(--card));
+    color: var(--text);
+}
+
+[data-part~="prompt"]::before {
+    --mark: 9px;
+    --ink: color-mix(in srgb, var(--pencil) 55%, transparent);
+    content: "";
+    position: absolute;
+    inset: -5px;
+    background:
+        linear-gradient(var(--ink), var(--ink)) top left / var(--mark) 1.5px,
+        linear-gradient(var(--ink), var(--ink)) top left / 1.5px var(--mark),
+        linear-gradient(var(--ink), var(--ink)) top right / var(--mark) 1.5px,
+        linear-gradient(var(--ink), var(--ink)) top right / 1.5px var(--mark),
+        linear-gradient(var(--ink), var(--ink)) bottom left / var(--mark) 1.5px,
+        linear-gradient(var(--ink), var(--ink)) bottom left / 1.5px var(--mark),
+        linear-gradient(var(--ink), var(--ink)) bottom right / var(--mark) 1.5px,
+        linear-gradient(var(--ink), var(--ink)) bottom right / 1.5px var(--mark);
+    background-repeat: no-repeat;
+    pointer-events: none;
+    transition:
+        inset var(--t-hover) var(--ease-out),
+        opacity var(--t-hover) var(--ease-out);
+}
+
+@media (hover: hover) {
+    [data-part~="prompt"]:hover {
+        background: var(--card);
+    }
+
+    [data-part~="prompt"]:hover::before {
+        --ink: var(--pencil);
+        inset: -7px;
+    }
+}
+
+/* Wide screens: yours to the right, at most most of the column; others' and Pi's schedule to the left. */
+@media (min-width: 700px) {
+    [data-part~="prompt"] {
+        width: fit-content;
+        min-width: min(320px, 100%);
+        max-width: 84%;
+    }
+
+    [data-part~="prompt"][data-from="me"] {
+        margin-inline-start: auto;
+    }
+}
+
+/* Who and when: one line of lettering. */
+[data-part~="prompt-head"] {
+    color: var(--faint);
+}
+
+[data-part~="prompt-author"] {
+    font-weight: 600;
+    color: var(--muted);
+}
+
+[data-part~="author-mark"] {
+    border-radius: var(--r-mark);
+    font-family: var(--mono);
+    letter-spacing: 0;
+}
+
+/* The words under the name. */
+[data-part~="prompt-text"] {
+    line-height: 1.6;
+}
+
+/* Pi's prose: headings lettered and ruled, tables drafted, quotes marked in pencil. */
+[data-part~="reply"] :is(h1, h2, h3) {
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--hair);
+    letter-spacing: -0.01em;
+}
+
+[data-part~="reply"] table {
+    border-radius: 0;
+}
+
+[data-part~="reply"] th {
+    font-family: var(--mono);
+    font-size: 0.78em;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+[data-part~="reply"] blockquote {
+    border-inline-start-color: var(--pencil);
+    color: var(--muted);
+}
+
+[data-part~="reply"] [data-part~="inline-code"] {
+    padding: 1px 5px;
+    border: 1px solid var(--hair-2);
+    border-radius: var(--r-tag);
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+    color: var(--text);
+    font-size: 0.86em;
+}
+
+[data-part~="reply-actions"] {
+    color: var(--faint);
+}
+
+/* ─── What Pi did: a log line, opened into a panel ─── */
+
+[data-part~="activity"] {
+    border-color: transparent;
+    border-radius: var(--r-card);
+    background: none;
+    transition:
+        background-color var(--t-hover) var(--ease-out),
+        border-color var(--t-hover) var(--ease-out);
+}
+
+[data-part~="activity-head"] {
+    border-radius: var(--r-card);
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+}
+
+[data-part~="activity"][data-state~="open"] {
+    border-color: var(--line);
+    background: color-mix(in srgb, var(--panel) 80%, transparent);
+}
+
+[data-part~="activity"][data-state~="open"] > [data-part~="activity-head"] {
+    border-bottom: 1px dashed var(--line);
+    border-radius: var(--r-card) var(--r-card) 0 0;
+}
+
+/* The steps: square survey marks on the rule. */
+[data-part~="step-mark"] {
+    border-radius: var(--r-mark);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--panel) 80%, var(--bg));
+}
+
+:is([data-part~="tool-call"][data-state="ok"], [data-part~="thinking"]) [data-part~="step-mark"] {
+    background-image: none;
+    background-color: color-mix(in srgb, var(--body) 10%, var(--panel));
+    color: var(--muted);
+}
+
+[data-part~="step-label"] {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--body);
+}
+
+[data-part~="live-line"] {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--muted);
+}
+
+/* Code: a detail drawing, its label lettered over a dashed rule. */
+[data-part~="code-block"] {
+    border: 1px solid var(--line);
+    border-radius: var(--r-card);
+    background: var(--code-bg);
+}
+
+[data-part~="code-head"] {
+    border-bottom: 1px dashed var(--line);
+    color: var(--muted);
+}
+
+/* ─── The message box: a sheet of its own, crop marks while you type ─── */
+
+[data-part~="message-box"] {
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r-card);
+    background: var(--card);
+    box-shadow:
+        0 0 0 3px var(--bg),
+        0 0 0 4px var(--hair);
+}
+
+[data-part~="message-box"]::after {
+    --mark: 12px;
+    --ink: var(--pencil);
+    content: "";
+    position: absolute;
+    inset: -12px;
+    background:
+        linear-gradient(var(--ink), var(--ink)) top left / var(--mark) 2px,
+        linear-gradient(var(--ink), var(--ink)) top left / 2px var(--mark),
+        linear-gradient(var(--ink), var(--ink)) top right / var(--mark) 2px,
+        linear-gradient(var(--ink), var(--ink)) top right / 2px var(--mark),
+        linear-gradient(var(--ink), var(--ink)) bottom left / var(--mark) 2px,
+        linear-gradient(var(--ink), var(--ink)) bottom left / 2px var(--mark),
+        linear-gradient(var(--ink), var(--ink)) bottom right / var(--mark) 2px,
+        linear-gradient(var(--ink), var(--ink)) bottom right / 2px var(--mark);
+    background-repeat: no-repeat;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+        inset var(--t-in) var(--ease-out),
+        opacity var(--t-fade) var(--ease-out);
+}
+
+[data-part~="message-box"]:focus-within {
+    border-color: var(--accent-line);
+}
+
+[data-part~="message-box"]:focus-within::after {
+    inset: -7px;
+    opacity: 1;
+}
+
+[data-part~="model-chip"],
+[data-part~="plan-chip"] {
+    border-radius: var(--r-control);
+    font-family: var(--mono);
+    font-size: 12px;
+}
+
+[data-part~="send-button"] {
+    border-radius: var(--r-control);
+}
+
+[data-part~="status-line"] {
+    font-family: var(--mono);
+    color: var(--faint);
+}
+
+/* ─── Sheets, the menu, the launcher ─── */
+
+[data-part~="sheet-head"] {
+    border-bottom: 1px solid var(--line-strong);
+    box-shadow:
+        0 2px 0 var(--card),
+        0 3px 0 var(--hair);
+}
+
+[data-part~="launcher-input"] {
+    font-family: var(--mono);
+}
+
+[data-part~="launcher-row"][aria-selected="true"] {
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    box-shadow: inset 2px 0 0 var(--accent);
+}
+
+/* ─── The home screen ─── */
+
+[data-part~="home-title"] {
+    letter-spacing: 0.02em;
+}
+
+[data-part~="home-color"] {
+    border-radius: var(--r-mark);
+}
+
+[data-part~="home-recent-key"] {
+    border-radius: var(--r-tag);
+}
+
+/* ─── Phones ─── */
+
+@media (max-width: 699px) {
+    [data-part~="prompt"]::before {
+        --mark: 7px;
+        inset: -4px;
+    }
+
+    [data-part~="message-box"] {
+        box-shadow: none;
+    }
+
+    [data-part~="message-box"]:focus-within::after {
+        inset: -5px;
+    }
+}

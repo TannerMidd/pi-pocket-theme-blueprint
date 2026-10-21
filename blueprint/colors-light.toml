@@ -1,0 +1,23 @@
+# Blueprint, light: a whiteprint (diazo print). Warm drafting paper, Prussian-blue ink, and a deep amber pencil.
+mode = "light"
+
+accent = "#1d5aa6"
+selection = "#d3ddea"
+
+background = "#f4f2eb"
+dark_background = "#ebe8de"
+darker_background = "#dfdbcd"
+lighter_background = "#fbfaf6"
+
+foreground = "#24406a"
+dark_foreground = "#5b6f8e"
+light_foreground = "#1c375e"
+bright_foreground = "#11284a"
+
+red = "#b3342b"
+yellow = "#94650a"
+orange = "#b0521c"
+green = "#2c7443"
+cyan = "#11708a"
+blue = "#1d5aa6"
+magenta = "#7448ab"
