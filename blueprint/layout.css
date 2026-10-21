@@ -31,8 +31,8 @@
     --scrim: color-mix(in srgb, var(--desk) 66%, transparent);
 
     /* The drawing grid: a fine line every 24px, a stronger one every 5 cells. */
-    --grid-minor: color-mix(in srgb, var(--body) 3%, transparent);
-    --grid-major: color-mix(in srgb, var(--body) 5.5%, transparent);
+    --grid-minor: color-mix(in srgb, var(--body) 6.5%, transparent);
+    --grid-major: color-mix(in srgb, var(--body) 12%, transparent);
     --grid:
         linear-gradient(var(--grid-major) 1px, transparent 1px) -1px -1px / 120px 120px,
         linear-gradient(90deg, var(--grid-major) 1px, transparent 1px) -1px -1px / 120px 120px,
@@ -76,8 +76,8 @@
 
 :root[data-mode="light"] {
     --sh: rgb(20 40 70 / 0.22);
-    --grid-minor: color-mix(in srgb, var(--accent) 7%, transparent);
-    --grid-major: color-mix(in srgb, var(--accent) 13%, transparent);
+    --grid-minor: color-mix(in srgb, var(--accent) 9%, transparent);
+    --grid-major: color-mix(in srgb, var(--accent) 17%, transparent);
     --muted: color-mix(in oklab, var(--body) 84%, var(--bg));
     --faint: color-mix(in oklab, var(--body) 72%, var(--bg));
 }
@@ -90,13 +90,13 @@
         background:
             var(--wallpaper, none) center / cover no-repeat,
             linear-gradient(
-                    color-mix(in srgb, var(--body) 6%, transparent) 1px,
+                    color-mix(in srgb, var(--body) 9%, transparent) 1px,
                     transparent 1px
                 ) -1px -1px /
                 40px 40px,
             linear-gradient(
                     90deg,
-                    color-mix(in srgb, var(--body) 6%, transparent) 1px,
+                    color-mix(in srgb, var(--body) 9%, transparent) 1px,
                     transparent 1px
                 ) -1px -1px /
                 40px 40px,
